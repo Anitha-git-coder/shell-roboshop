@@ -2,6 +2,8 @@
 
 AMI_ID="ami-09c813fb71547fc4f"
 SG_ID="sg-0ff5d6e086f8deb6b"
+ZONE_ID="Z08957613Q2VP6KYK490C"
+DOMAIN_NAME="anitha.fun"
 
 for instance in $@
 do
@@ -10,8 +12,32 @@ INSTANCE_ID=$(aws ec2 run-instances --image-id ami-09c813fb71547fc4f --instance-
 
 if [ $instance !="frontend" ]; then
 IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PrivateIpAddress" --output text)
+RECORD_NAME="$instance.$DOMAIN_NAME" #mongodb.anitha.fun
 else
 IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PrivateIpAddress" --output text)
+RECORD_NAME="$DOMAIN_NAME" # anitha.fun --frontend
 fi
-    echo "$instance : $IP" 
+    echo "$instance : $IP"
+
+    aws route53 change-resource-record-sets \
+  --hosted-zone-id $ZONE_ID \
+  --change-batch '
+{
+  "Comment": "Update records",
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "$RECORD_NAME",
+        "Type": "A",
+        "TTL": 1,
+        "ResourceRecords": [
+          {
+            "Value": "$IP"
+          }
+        ]
+      }
+    }
+  ]
+}'
 done
