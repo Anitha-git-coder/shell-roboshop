@@ -66,8 +66,14 @@ cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "copy mongo repo"
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "install mongodb client"
-mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
-VALIDATE $? "load catalogue products"
+INDEX=$(mongosh mongodb.anitha.fun --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')")
+if [ INDEX -ne 0]; then
+    mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
+    VALIDATE $? "load catalogue products"
+else 
+    echo -e "already loaded $Y skipping $N"
+fi
+
 systemctl restart catalogue
 VALIDATE $? "restarted catalogue"
 
