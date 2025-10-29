@@ -68,7 +68,7 @@ dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "install mongodb client"
 mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
 VALIDATE $? "load catalogue products"
-systemctl reatart catalogue
+systemctl restart catalogue
 VALIDATE $? "restarted catalogue"
 
 
