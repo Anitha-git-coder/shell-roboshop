@@ -51,6 +51,8 @@ curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue
 VALIDATE $? "creating catalogue application"
 cd /app 
 VALIDATE $? "changeing the app directory"
+rm -rf /app/*
+VALIDATE $? "removing existing code"
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "unzip catalogue"
 npm install &>>$LOG_FILE
