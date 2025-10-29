@@ -14,6 +14,10 @@ LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # /var/log/shell-script/16-logs.log
 START_TIME=$(date +%s)
 mkdir -p $LOGS_FOLDER
 SCRIPT_DIR=$PWD
+echo $SCRIPT_DIR
+SCRIPT_DIR=$(dirname $(realpath "$0"))
+echo $SCRIPT_DIR
+
 echo "Script started executed at: $(date)" | tee -a $LOG_FILE
 
 if [ $USERID -ne 0 ]; then
