@@ -1,6 +1,7 @@
 #!/bin/bash
 
+set -e
 echo "hello"
 echo "before error"
-echo s;aslas'A
+s;aslas
 echo "after error"
