@@ -1,8 +1,7 @@
 #!/bin/bash
 
 set -e
-error()
-{
+error(){
     echo "error in line no:$LINENO,cmd failed: $BASH_COMMAND"
 }
 
