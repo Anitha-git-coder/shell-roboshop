@@ -29,17 +29,13 @@ dnf module disable nodejs -y &>>$LOG_FILE
 dnf module enable nodejs:20 -y &>>$LOG_FILE
 dnf install nodejs -y &>>$LOG_FILE
 
-if id roboshop &>>$LOG_FILE; then
-  echo -e "user already exists... $Y skipping $W"
+id roboshop &>>$LOG_FILE
+if [ $? -ne 0 ]; then
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
+   
 else
-  useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
+    echo -e "user already exits.... $Y skipping $W"
 fi
-#id roboshop &>>$LOG_FILE
-#if [ $? -ne 0 ]; then
-  #  useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE   
-#else
- #   echo -e "user already exits.... $Y skipping $W"
-#fi
 mkdir -p /app 
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
