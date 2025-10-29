@@ -1,40 +1,34 @@
 #!/bin/bash
 
-set -euo pipefail
-trap 'echo "error in line no:$LINENO,cmd failed: $BASH_COMMAND"' ERR
-
+USERID=$(id -u)
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
-W="\e[0m"
-
+N="\e[0m"
 
 LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
-#echo "13-logs.sh" | cut -d "." -f1
-LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
-
-USERID=$(id -u)
-
-if [ $USERID  -ne 0 ]; then
-    echo -e "error :: run with root privelege"
-    exit 1
-fi
+LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # /var/log/shell-script/16-logs.log
 
 mkdir -p $LOGS_FOLDER
-echo "script started at $(date)" | tee -a $LOG_FILE
+echo "Script started executed at: $(date)" | tee -a $LOG_FILE
 
-VALIDATE(){ # dont execute by itself ,executes only when called
- if [ $1 -ne 0 ]; then
-    echo -e "error::  $1  $R failure $W" | tee -a $LOG_FILE
-    exit 1
- else 
-    echo -e " $2 is $G success-full $W" | tee -a $LOG_FILE
+if [ $USERID -ne 0 ]; then
+    echo "ERROR:: Please run this script with root privelege"
+    exit 1 # failure is other than 0
 fi
+
+VALIDATE(){ # functions receive inputs through args just like shell script args
+    if [ $1 -ne 0 ]; then
+        echo -e "$2 ... $R FAILURE $N" | tee -a $LOG_FILE
+        exit 1
+    else
+        echo -e "$2 ... $G SUCCESS $N" | tee -a $LOG_FILE
+    fi
 }
 
 cp mongo.repo /etc/yum.repos.d/mongo.repo
-VALIDATE $? "Adding mongo repo"
+VALIDATE $? "Adding Mongo repo"
 
 dnf install mongodb-org -y &>>$LOG_FILE
 VALIDATE $? "Installing MongoDB"
@@ -47,7 +41,6 @@ VALIDATE $? "Start MongoDB"
 
 sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
 VALIDATE $? "Allowing remote connections to MongoDB"
-
 
 systemctl restart mongod
 VALIDATE $? "Restarted MongoDB"
