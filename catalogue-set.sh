@@ -34,7 +34,7 @@ if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
    
 else
-    echo -e "user already exits.... $Y skipping $N"
+    echo -e "user already exits.... $Y skipping $W"
 fi
 mkdir -p /app 
 
@@ -62,7 +62,7 @@ if [ INDEX -ne 0]; then
     mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
    
 else 
-    echo -e "already loaded $Y skipping $N"
+    echo -e "already loaded $Y skipping $W"
 fi
 
 systemctl restart catalogue
