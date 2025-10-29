@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -euo pipefail
+trap 'echo "error in line no:$LINENO,cmd failed: $BASH_COMMAND"' ERR
+
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"

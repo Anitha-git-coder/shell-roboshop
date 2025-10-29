@@ -55,7 +55,7 @@ systemctl enable catalogue &>>$LOG_FILE
 
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo 
 
-dnf install mongodb-mongoshffsf -y &>>$LOG_FILE
+dnf install mongodb-mongosh-y &>>$LOG_FILE
 
 INDEX=$(mongosh mongodb.anitha.fun --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')")
 if [ INDEX -ne 0 ]; then
