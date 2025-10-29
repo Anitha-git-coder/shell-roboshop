@@ -8,6 +8,7 @@ W="\e[0m"
 
 LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
+SCRIPT_DIR=$PWD
 MONGODB_HOST=mongodb.anitha.fun
 #echo "13-logs.sh" | cut -d "." -f1
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
@@ -49,7 +50,7 @@ unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "unzip catalogue"
 npm install &>>$LOG_FILE
 VALIDATE $? "install dependencies"
-cp catalogue.service /etc/systemd/system/catalogue.service
+cp $SCRIPT_DIR/etc/systemd/system/catalogue.service
 VALIDATE $? "copy systemctl service"
 systemctl daemon-reload
 systemctl enable catalogue &>>$LOG_FILE
