@@ -3,6 +3,13 @@
 set -euo pipefail
 trap 'echo "error in line no:$LINENO,cmd failed: $BASH_COMMAND"' ERR
 
+set -x  # Enable debug mode
+
+# Your script logic here
+
+set +x  # Disable debug mode
+
+
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
