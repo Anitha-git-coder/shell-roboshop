@@ -9,7 +9,7 @@ W="\e[0m"
 LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
 SCRIPT_DIR=$PWD
-MONGODB_HOST= 172.31.26.128 
+MONGODB_HOST=172.31.26.128
 #echo "13-logs.sh" | cut -d "." -f1
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 
